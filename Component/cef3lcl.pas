@@ -49,6 +49,11 @@ Unit cef3lcl;
 {$ENDIF}
 *)
 
+{$ifdef darwin}
+  // should be allowed for Cocoa only
+  {$DEFINE TargetDefined}
+{$endif}
+
 {$IFNDEF TargetDefined}
   {$ERROR This LCL widgetset/OS is not yet supported}
 {$ENDIF}
