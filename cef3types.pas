@@ -178,13 +178,14 @@ Type
     kNullWindowHandle = nil;
 
   Type
-    TCefCursorHandle = TNSCursorPtr;
-    TCefEventHandle = TNSEventPtr;
-    TCefWindowHandle = TNSViewPtr;
-    TCefTextInputContext = TNSTextInputContextPtr;
+    TCefCursorHandle = NSCursorPtr;
+    TCefEventHandle = NSEventPtr;
+    TCefWindowHandle = NSViewPtr;
+    TCefTextInputContext = NSTextInputContextPtr;
+  {$ELSE}
+    TCefTextInputContext = Pointer;
   {$ENDIF}
 
-  TCefTextInputContext = Pointer;
 
   // Structure representing CefExecuteProcess arguments.
   PCefMainArgs = ^TCefMainArgs;

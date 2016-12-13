@@ -321,9 +321,9 @@ Type
     function GetWindowlessFrameRate: Integer;
     procedure SetWindowlessFrameRate(frameRate: Integer);
     {$IFDEF DARWIN}
-      function GetNstextInputContext: ICefTextInputContext;
-      procedure HandleKeyEventBeforeTextInputClient(event: TCefEventHandle);
-      procedure HandleKeyAfterBeforeTextInputClient(event: TCefEventHandle);
+      //function GetNstextInputContext: ICefTextInputContext;
+      //procedure HandleKeyEventBeforeTextInputClient(event: TCefEventHandle);
+      //procedure HandleKeyAfterBeforeTextInputClient(event: TCefEventHandle);
     {$ENDIF}
     procedure DragTargetDragEnter(dragData: ICefDragData; const event: TCefMouseEvent; allowedOps: TCefDragOperationsMask);
     procedure DragTargetDragOver(const event: TCefMouseEvent; allowedOps: TCefDragOperationsMask);
