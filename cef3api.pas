@@ -5997,7 +5997,10 @@ Implementation
 Uses Math;
 
 Const
-  CefLibrary: String = {$IFDEF WINDOWS}'libcef.dll'{$ELSE}'libcef.so'{$ENDIF};
+  CefLibrary: String = {$IFDEF WINDOWS}'libcef.dll'{$endif}
+     {$ifdef linux}'libcef.so'{$endif}
+     {$ifdef darwin}'Chromium Embedded Framework'{$endif}
+     ;
 Var
   LibHandle : TLibHandle = 0;
 
@@ -6026,6 +6029,58 @@ begin
 end;
 { ***                     *** }
 
+{$ifdef darwin}
+function LoadLibraryFromBundlePaths(const CefLibrary: string): TLibHandle;
+var
+  fwname : string;
+  nm     : string;
+  exedir : string;
+  exe    : string;
+begin
+  exe:=ExpandFileName(ParamStr(0));
+  writeln('exe: ', exe);
+  exedir:=ExtractFileDir(exe);
+  fwname:=ChangeFileExt(CefLibrary,'.framework');
+
+  // 1st attempt is to read (we're the main bundled application)
+  // Contents
+  //   MacOS   <- exedir
+  //     exe   <- (ParamStr(0)
+  //   Frameworks
+  //     name.framework   <- fwname
+  //       name           <- the lib we want to load
+  nm:=ExtractFileDir(exedir)+PathDelim+'Frameworks'+PathDelim+fwname+PathDelim+CefLibrary;
+  writeln(nm);
+  writeln(FileExists(nm));
+  Result := LoadLibrary(nm);
+  if Result<>0 then Exit;
+
+  // 2nd attempt is to make one more level-up (we're subprocess?)
+  //   Frameworks
+  //     name.framework   <- fwname
+  //       name           <- the lib we want to load
+  //     subapp.app
+  //       Contents
+  //         MacOS   <- exedir
+  //           exe   <- (ParamStr(0)
+  nm:=ExtractFileDir(exedir); // to Contents
+  nm:=ExtractFileDir(nm);   // to subapp.app
+  nm:=ExtractFileDir(nm);   // to Frameworks
+  nm:=nm+PathDelim+fwname+PathDelim+CefLibrary;
+  writeln(nm);
+  writeln(FileExists(nm));
+  Result := LoadLibrary(nm);
+  if Result<>0 then Exit;
+
+  // last attempt (we're a console application and the framework is the next to us?)
+  nm :=exedir+PathDelim+fwname+PathDelim+CefLibrary;
+  writeln(nm);
+  writeln(FileExists(nm));
+  Result := LoadLibrary(nm);
+end;
+
+{$endif}
+
 function CefLoadLibrary: Boolean;
 begin
   {$IFDEF DEBUG}
@@ -6037,7 +6092,11 @@ begin
     Set8087CW(Get8087CW or $3F); // deactivate FPU exception
     SetExceptionMask([exInvalidOp, exDenormalized, exZeroDivide, exOverflow, exUnderflow, exPrecision]);
 
-    LibHandle := LoadLibrary(PChar(CefLibrary));
+    LibHandle := LoadLibrary(CefLibrary);
+    {$ifdef darwin}
+    if LibHandle=0 then
+      LibHandle:=LoadLibraryFromBundlePaths(CefLibrary);
+    {$endif}
     If LibHandle = 0 then RaiseLastOsError;
 
     Pointer(cef_string_wide_set)             := GetProcAddress(LibHandle, 'cef_string_wide_set');
