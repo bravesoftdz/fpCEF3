@@ -179,9 +179,9 @@ Type
 
   Type
     TCefCursorHandle = NSCursorPtr;
-    TCefEventHandle = NSEventPtr;
-    TCefWindowHandle = NSViewPtr;
-    TCefTextInputContext = NSTextInputContextPtr;
+    TCefEventHandle = NSEvent;
+    TCefWindowHandle = NSView;
+    TCefTextInputContext = NSTextInputContext;
   {$ELSE}
     TCefTextInputContext = Pointer;
   {$ENDIF}
