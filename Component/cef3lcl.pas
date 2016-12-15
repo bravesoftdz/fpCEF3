@@ -71,6 +71,9 @@ Uses
   {$IFDEF LCLQT}
   qt4, qtwidgets,
   {$ENDIF}
+  {$ifdef LCLCocoa}
+  CocoaInt,
+  {$endif}
   cef3types, cef3lib, cef3intf, cef3gui, cef3context;
 
 Type
@@ -670,7 +673,7 @@ Var
   info: TCefWindowInfo;
   settings: TCefBrowserSettings;
 
-{$IFDEF WINDOWS}
+{$IF Defined(WINDOWS) OR Defined(Darwin)}
   rect : TRect;
 {$ENDIF}
 begin
@@ -703,6 +706,15 @@ begin
       info.width := Width;
 	    info.height := Height;
     {$ENDIF}
+
+    {$IFDEF LCLCocoa}
+      info.parent_view := TCefWindowHandle( Self.Handle );
+      rect:=GetClientRect;
+      info.x := rect.Left;
+      info.y := rect.Top;
+      info.width := rect.Right - rect.Left;
+      info.height := rect.Bottom - rect.Top;
+    {$endif}
 
     FillChar(settings, SizeOf(TCefBrowserSettings), 0);
     settings.size := SizeOf(TCefBrowserSettings);
