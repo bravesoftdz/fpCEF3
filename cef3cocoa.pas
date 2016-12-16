@@ -1,3 +1,23 @@
+(*
+ *                       Free Pascal Chromium Embedded 3
+ *
+ * Usage allowed under the restrictions of the Lesser GNU General Public License
+ * or alternatively the restrictions of the Mozilla Public License 1.1
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ *
+ * Author: Dmitry Boyarintsev <skalogryz.lists@gmail.com>
+ * Repository: http://github.com/skalogryz/fpCEF3
+ *
+ * This unit is based of the examples from CEF library. It implements necessary
+ * Cocoa requirements of CEF.
+ *
+ * The unit is intented to use a part of fpCEF library by dliw (http://github.com/dliw/fpCEF3)
+ *
+ *)
+
 unit cef3cocoa;
 
 interface
