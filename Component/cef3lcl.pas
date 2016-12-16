@@ -72,7 +72,7 @@ Uses
   qt4, qtwidgets,
   {$ENDIF}
   {$ifdef LCLCocoa}
-  CocoaInt,
+  CocoaInt, cef3cocoa,
   {$endif}
   cef3types, cef3lib, cef3intf, cef3gui, cef3context;
 
@@ -1344,5 +1344,10 @@ procedure TCustomChromium.doOnRenderProcessTerminated(const Browser: ICefBrowser
 begin
   If Assigned(fOnRenderProcessTerminated) then fOnRenderProcessTerminated(Self, Browser, Status);
 end;
+
+initialization
+  {$ifdef LCLCocoa}
+  InitCRApplication;
+  {$endif}
 
 end.
