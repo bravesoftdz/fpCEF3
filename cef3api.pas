@@ -6038,7 +6038,6 @@ var
   exe    : string;
 begin
   exe:=ExpandFileName(ParamStr(0));
-  writeln('exe: ', exe);
   exedir:=ExtractFileDir(exe);
   fwname:=ChangeFileExt(CefLibrary,'.framework');
 
@@ -6050,8 +6049,6 @@ begin
   //     name.framework   <- fwname
   //       name           <- the lib we want to load
   nm:=ExtractFileDir(exedir)+PathDelim+'Frameworks'+PathDelim+fwname+PathDelim+CefLibrary;
-  writeln(nm);
-  writeln(FileExists(nm));
   Result := LoadLibrary(nm);
   if Result<>0 then Exit;
 
@@ -6067,15 +6064,11 @@ begin
   nm:=ExtractFileDir(nm);   // to subapp.app
   nm:=ExtractFileDir(nm);   // to Frameworks
   nm:=nm+PathDelim+fwname+PathDelim+CefLibrary;
-  writeln(nm);
-  writeln(FileExists(nm));
   Result := LoadLibrary(nm);
   if Result<>0 then Exit;
 
   // last attempt (we're a console application and the framework is the next to us?)
   nm :=exedir+PathDelim+fwname+PathDelim+CefLibrary;
-  writeln(nm);
-  writeln(FileExists(nm));
   Result := LoadLibrary(nm);
 end;
 
